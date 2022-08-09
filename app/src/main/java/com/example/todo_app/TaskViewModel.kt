@@ -1,5 +1,6 @@
 package com.example.todo_app
 
+
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo_app.data.Task
 import com.example.todo_app.data.TaskRepository
 import kotlinx.coroutines.launch
+
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observable {
     val tasks = repository.tasks
@@ -21,18 +23,15 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         inputText.value = ""
         inputSituation.value = false
     }
-    fun removeTask(){
-
-    }
     fun addTask(){
-        insert(Task(0, inputText.value!!, inputSituation.value!!))
-        inputText.value = ""
-        inputSituation.value = false
+        if (inputText.value!!.isNotBlank()){
+            insert(Task(0, inputText.value!!, inputSituation.value!!))
+            inputText.value = ""
+            inputSituation.value = false
+        }
     }
     fun deleteTask(task: Task){
         viewModelScope.launch {
-            println(task.text)
-            println("saeed")
             repository.delete(task)
         }
     }

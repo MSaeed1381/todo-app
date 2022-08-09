@@ -2,6 +2,7 @@ package com.example.todo_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,13 +28,18 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         initRecyclerView()
-
+        viewModel.inputText.observe(this, Observer {
+            if (it.isNotBlank()){
+                binding.ibAdd.visibility = View.VISIBLE
+            }else{
+                binding.ibAdd.visibility = View.INVISIBLE
+            }
+        })
 
     }
     private fun initRecyclerView(){
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         loadTasks()
-
     }
     private fun loadTasks(){
         viewModel.tasks.observe(this, Observer {

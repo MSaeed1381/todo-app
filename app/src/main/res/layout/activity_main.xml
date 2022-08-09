@@ -158,14 +158,15 @@
 
                 <ImageButton
                     android:layout_marginEnd="8dp"
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/ibAdd"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:background="@drawable/custom_add_button"
                     android:onClick="@{()->taskViewModel.addTask()}"
                     app:srcCompat="@drawable/icon_check"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
+                    android:visibility="invisible"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
