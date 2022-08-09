@@ -116,6 +116,7 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.13" />
 
+
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -138,11 +139,13 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:button="@drawable/custom_checkbox"
                     android:checked="@={taskViewModel.inputSituation}" />
 
                 <android.widget.EditText
                     android:id="@+id/editTextTextPersonName2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -151,14 +154,14 @@
                     android:hint="Create a new todo..."
                     android:inputType="textPersonName"
                     android:text="@={taskViewModel.inputText}"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <ImageButton
+                    android:layout_marginEnd="8dp"
                     android:id="@+id/imageButton2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
-                    android:layout_marginEnd="5dp"
                     android:background="@drawable/custom_add_button"
                     android:onClick="@{()->taskViewModel.addTask()}"
                     app:srcCompat="@drawable/icon_check"
