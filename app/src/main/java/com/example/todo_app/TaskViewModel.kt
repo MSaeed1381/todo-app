@@ -13,6 +13,9 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observable {
     val tasks = repository.tasks
+    val completedTasks = repository.completedTasks
+    val inProgressTasks = repository.inProgressTasks
+
     lateinit var task: Task
     @Bindable
     var inputText = MutableLiveData<String>()
@@ -51,6 +54,11 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         viewModelScope.launch {
             println(task.situation)
             repository.update(task)
+        }
+    }
+    fun deleteCompletedTask(){
+        viewModelScope.launch {
+            repository.deleteCompletedTask()
         }
     }
 

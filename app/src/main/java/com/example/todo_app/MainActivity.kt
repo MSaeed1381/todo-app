@@ -1,5 +1,6 @@
 package com.example.todo_app
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var viewModel: TaskViewModel
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -35,7 +37,13 @@ class MainActivity : AppCompatActivity() {
                 binding.ibAdd.visibility = View.INVISIBLE
             }
         })
+        viewModel.inProgressTasks.observe(this, Observer {
+            binding.textView4.text = "${it.size.toString()} items left"
+        })
 
+        binding.tvClearCompleted.setOnClickListener {
+            viewModel.deleteCompletedTask()
+        }
 
     }
     private fun initRecyclerView(){
@@ -47,10 +55,8 @@ class MainActivity : AppCompatActivity() {
             binding.recyclerView.adapter = TaskAdapter(it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
                 checkBoxClicked(item)
             }
+            // binding.textView4.text = viewModel.inProgressTasks.value!!.size.toString()
         })
-       /* viewModel.inputSituation.observe(this, Observer {
-            binding.recyclerView.adapter = TaskAdapter() { item: Task -> checkBoxClicked(item) }
-        })*/
     }
 
 
