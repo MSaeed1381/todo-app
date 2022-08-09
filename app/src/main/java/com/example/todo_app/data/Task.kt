@@ -10,7 +10,7 @@ import com.example.todo_app.Situation
 data class Task(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "task_id")
-    val id: String,
+    val id: Int,
 
     @ColumnInfo(name = "task_text")
     val text: String,
