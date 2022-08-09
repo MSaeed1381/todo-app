@@ -16,5 +16,5 @@ data class Task(
     val text: String,
 
     @ColumnInfo(name = "task_situation")
-    val situation: Boolean
+    var situation: Boolean
 )

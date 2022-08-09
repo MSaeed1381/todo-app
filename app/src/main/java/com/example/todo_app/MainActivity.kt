@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+
     }
     private fun initRecyclerView(){
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -43,10 +44,21 @@ class MainActivity : AppCompatActivity() {
     }
     private fun loadTasks(){
         viewModel.tasks.observe(this, Observer {
-            binding.recyclerView.adapter = TaskAdapter(it) { item: Task -> rowItemRemoveClick(item) }
+            binding.recyclerView.adapter = TaskAdapter(it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
+                checkBoxClicked(item)
+            }
         })
+       /* viewModel.inputSituation.observe(this, Observer {
+            binding.recyclerView.adapter = TaskAdapter() { item: Task -> checkBoxClicked(item) }
+        })*/
     }
+
+
     private fun rowItemRemoveClick(task: Task){
         viewModel.deleteTask(task)
+    }
+    private fun checkBoxClicked(task: Task){
+        println("hii")
+        viewModel.update(task)
     }
 }

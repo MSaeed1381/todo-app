@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observable {
     val tasks = repository.tasks
-
+    lateinit var task: Task
     @Bindable
     var inputText = MutableLiveData<String>()
     @Bindable
@@ -46,6 +46,14 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
             repository.deleteAll()
         }
     }
+    fun update(task: Task){
+        task.situation = !task.situation // toggle
+        viewModelScope.launch {
+            println(task.situation)
+            repository.update(task)
+        }
+    }
+
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
 
