@@ -21,16 +21,22 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         inputText.value = ""
         inputSituation.value = false
     }
+    fun removeTask(){
 
+    }
     fun addTask(){
-        println(inputSituation.value!!)
         insert(Task(0, inputText.value!!, inputSituation.value!!))
         inputText.value = ""
         inputSituation.value = false
     }
-    fun deleteTask(){
-
+    fun deleteTask(task: Task){
+        viewModelScope.launch {
+            println(task.text)
+            println("saeed")
+            repository.delete(task)
+        }
     }
+
     private fun insert(task: Task){
         viewModelScope.launch {
             repository.insert(task)

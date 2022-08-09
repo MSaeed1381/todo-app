@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todo_app.data.Task
 import com.example.todo_app.data.TaskDataBase
 import com.example.todo_app.data.TaskRepository
 import com.example.todo_app.databinding.ActivityMainBinding
@@ -37,7 +37,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun loadTasks(){
         viewModel.tasks.observe(this, Observer {
-            binding.recyclerView.adapter = TaskAdapter(it)
+            binding.recyclerView.adapter = TaskAdapter(it) { item: Task -> rowItemRemoveClick(item) }
         })
+    }
+    private fun rowItemRemoveClick(task: Task){
+        viewModel.deleteTask(task)
     }
 }
