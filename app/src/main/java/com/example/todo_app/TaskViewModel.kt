@@ -23,6 +23,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     }
 
     fun addTask(){
+        println(inputSituation.value!!)
         insert(Task(0, inputText.value!!, inputSituation.value!!))
         inputText.value = ""
         inputSituation.value = false
@@ -46,7 +47,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     }
 
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
-       
+
     }
 
 }

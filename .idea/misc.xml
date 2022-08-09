@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/costum_item_background.xml" value="0.161" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/custom_add_button.xml" value="0.161" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/custom_recyler_background.xml" value="0.165" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/custom_textview_add.xml" value="0.161" />
-        <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/row_item_task.xml" value="0.25" />
       </map>
     </option>
   </component>
