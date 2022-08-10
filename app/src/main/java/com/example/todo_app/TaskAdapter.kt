@@ -1,7 +1,11 @@
 package com.example.todo_app
 
 import android.content.res.ColorStateList
+import android.graphics.ColorSpace
 import android.graphics.Paint
+import android.provider.CalendarContract
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
@@ -36,9 +40,10 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
      binding.tvText.text = task.text
      if (task.situation){
          binding.tvText.paintFlags = binding.tvText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-         binding.tvText.setTextColor(Color.Red)
+         binding.tvText.setTextColor((0xFFd8d7d6).toInt())
      }else{
          binding.tvText.paintFlags = binding.tvText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+         binding.tvText.setTextColor((0xff000000).toInt())
      }
 
 
