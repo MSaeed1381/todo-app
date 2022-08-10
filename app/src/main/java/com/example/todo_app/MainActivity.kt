@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
             binding.recyclerView.adapter = TaskAdapter(it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
                 checkBoxClicked(item)
             }
-            // binding.textView4.text = viewModel.inProgressTasks.value!!.size.toString()
         })
     }
 
@@ -64,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteTask(task)
     }
     private fun checkBoxClicked(task: Task){
-        println("hii")
         viewModel.update(task)
     }
 }
