@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.allTasks -> initRecyclerView(viewModel.tasks)
-                R.id.completedTasks -> initRecyclerView(viewModel.completedTasks)
-                R.id.activeTasks -> initRecyclerView(viewModel.inProgressTasks)
+                R.id.allTasks -> print(viewModel.tasks.toString())
+                R.id.completedTasks -> print(viewModel.completedTasks)
+                R.id.activeTasks -> print(viewModel.inProgressTasks)
             }
             true
         }

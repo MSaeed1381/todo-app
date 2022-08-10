@@ -1,14 +1,8 @@
 package com.example.todo_app
 
-import android.content.res.ColorStateList
-import android.graphics.ColorSpace
 import android.graphics.Paint
-import android.provider.CalendarContract
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.ui.graphics.Color
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.data.Task
@@ -23,7 +17,6 @@ class TaskAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding:RowItemTaskBinding = DataBindingUtil.inflate(layoutInflater, R.layout.row_item_task, parent, false)
         return TaskViewHolder(binding)
-
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
@@ -45,7 +38,6 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
          binding.tvText.paintFlags = binding.tvText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
          binding.tvText.setTextColor((0xff000000).toInt())
      }
-
 
      binding.ibDelete.setOnClickListener {
          function(task)
