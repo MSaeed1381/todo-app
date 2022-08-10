@@ -1,8 +1,10 @@
 package com.example.todo_app
 
+import android.content.res.ColorStateList
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.ui.graphics.Color
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.data.Task
@@ -32,6 +34,14 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
  fun bind(task: Task, function: (Task) -> Unit, update: (Task) -> Unit){
      binding.checkBox.isChecked = task.situation
      binding.tvText.text = task.text
+     if (task.situation){
+         binding.tvText.paintFlags = binding.tvText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+         binding.tvText.setTextColor(Color.Red)
+     }else{
+         binding.tvText.paintFlags = binding.tvText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+     }
+
+
      binding.ibDelete.setOnClickListener {
          function(task)
      }

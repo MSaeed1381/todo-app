@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.taskViewModel = viewModel
         binding.lifecycleOwner = this
 
-        initRecyclerView()
+        initRecyclerView(viewModel.tasks)
         viewModel.inputText.observe(this, Observer {
             if (it.isNotBlank()){
                 binding.ibAdd.visibility = View.VISIBLE
@@ -45,13 +47,26 @@ class MainActivity : AppCompatActivity() {
             viewModel.deleteCompletedTask()
         }
 
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.allTasks -> initRecyclerView(viewModel.tasks)
+                R.id.completedTasks -> initRecyclerView(viewModel.completedTasks)
+                R.id.activeTasks -> initRecyclerView(viewModel.inProgressTasks)
+            }
+            true
+        }
+
+        binding.ibAdd.setOnClickListener {
+            initRecyclerView(viewModel.tasks)
+        }
+
     }
-    private fun initRecyclerView(){
+    private fun initRecyclerView(tasks: LiveData<List<Task>>){
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        loadTasks()
+        loadTasks(tasks)
     }
-    private fun loadTasks(){
-        viewModel.tasks.observe(this, Observer {
+    private fun loadTasks(tasks: LiveData<List<Task>>){
+        tasks.observe(this, Observer {
             binding.recyclerView.adapter = TaskAdapter(it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
                 checkBoxClicked(item)
             }

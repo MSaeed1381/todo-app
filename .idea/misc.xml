@@ -14,6 +14,7 @@
         <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/custom_textview_add.xml" value="0.161" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/drawable/item_inprogress_checkbox.xml" value="0.165" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/fragment_list_view.xml" value="0.1" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/layout/row_item_task.xml" value="0.33" />
         <entry key="..\:/androidApp/todoapp/app/src/main/res/menu/main_menu.xml" value="0.3681640625" />
       </map>
