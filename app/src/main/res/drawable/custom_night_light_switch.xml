@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/icon_moon" android:state_checked="false">
+        <shape>
+            <size android:height="70dp" android:width="70dp"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/icon_sun" android:state_checked="true">
+        <shape>
+            <size android:height="70dp" android:width="70dp"/>
+        </shape>
+    </item>
+</selector>

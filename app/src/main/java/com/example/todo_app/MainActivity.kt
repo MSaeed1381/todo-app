@@ -1,9 +1,12 @@
 package com.example.todo_app
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,16 +25,48 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         val dao = TaskDataBase.getInstance(application).taskDao
         val repository = TaskRepository(dao)
         val factory = TaskViewModelFactory(repository)
+        /*binding.checkBox2.setOnCheckedChangeListener {buttonView, isChecked ->
+            println("checked " + binding.checkBox2.isChecked.toString())
+            if (binding.checkBox2.isChecked) {
+                binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+            } else {
+                binding.imageView4.setImageResource(R.drawable.bg_mobile_light)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }*/
+        binding.checkBox2.setOnCheckedChangeListener { _, isChecked ->
+            if (binding.checkBox2.isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                binding.imageView4.setImageResource(R.drawable.bg_mobile_light)
+            }
+        }
+
 
         viewModel = ViewModelProvider(this, factory)[TaskViewModel::class.java]
         binding.taskViewModel = viewModel
         binding.lifecycleOwner = this
 
         initRecyclerView(viewModel.tasks)
+        /*if (list != null)
+            initRecyclerView(list!!)
+        else{
+            list = viewModel.tasks
+            initRecyclerView(viewModel.tasks)
+        }*/
+
         viewModel.inputText.observe(this, Observer {
             if (it.isNotBlank()){
                 binding.ibAdd.visibility = View.VISIBLE
@@ -39,26 +74,35 @@ class MainActivity : AppCompatActivity() {
                 binding.ibAdd.visibility = View.INVISIBLE
             }
         })
+
+
         viewModel.inProgressTasks.observe(this, Observer {
-            binding.textView4.text = "${it.size.toString()} items left"
+            binding.textView4.text = "${it.size} items left"
         })
+
+
 
         binding.tvClearCompleted.setOnClickListener {
             viewModel.deleteCompletedTask()
         }
-
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.allTasks -> print(viewModel.tasks.toString())
-                R.id.completedTasks -> print(viewModel.completedTasks)
-                R.id.activeTasks -> print(viewModel.inProgressTasks)
+        /*item.observe(this) {
+            list = if (R.id.completedTasks == it) {
+                viewModel.completedTasks
+            } else if (R.id.activeTasks == it) {
+                viewModel.inProgressTasks
+            } else {
+                viewModel.tasks
             }
+            initRecyclerView(list!!)
+        }
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            item.value = it.itemId
             true
-        }
+        }*/
 
-        binding.ibAdd.setOnClickListener {
+       /* binding.ibAdd.setOnClickListener {
             initRecyclerView(viewModel.tasks)
-        }
+        }*/
 
     }
     private fun initRecyclerView(tasks: LiveData<List<Task>>){
