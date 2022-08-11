@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <stroke android:color="#FAFAFA" android:width="2dp"/>
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="-2dp" android:end="-2dp" android:start="-2dp">
+        <shape android:shape="rectangle">
+            <stroke android:color="@color/stroke_checkbox" android:width="0.5dp"/>
+            <solid android:color="@color/itembackground"/>
+        </shape>
+    </item>
+</layer-list>

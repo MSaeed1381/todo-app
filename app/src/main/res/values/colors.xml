@@ -9,6 +9,12 @@
     <color name="white">#FFFFFFFF</color>
 
 
-    <color name="background">#FFFFFFFF</color>
+    <color name="background">#FFFAFAFA</color>
+    <color name="itembackground">#FFFFFFFF</color>
+    <color name="text_color">#FF000000</color>
+    <color name="stroke_checkbox">#FF777A92</color>
+    <color name="hint_text">#FFFAFAFA</color>
+    <color name="checkbox_color">#FFFFFFFF</color>
+    <color name="light_text_color">#FF585B74</color>
 
 </resources>

@@ -40,13 +40,15 @@
 
                 <TextView
                     android:id="@+id/tvText"
+                    style="@style/Widget.TextView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:fontFamily="@font/comic"
                     android:text="TextView"
-                    android:textSize="15sp"
-                    />
+                    android:textColor="@color/text_color"
+                    android:textSize="15sp" />
 
                 <ImageButton
                     android:id="@+id/ibDelete"

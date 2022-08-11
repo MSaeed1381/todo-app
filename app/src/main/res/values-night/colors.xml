@@ -8,5 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+
     <color name="background">#FF161722</color>
+    <color name="itembackground">#FF34364C</color>
+    <color name="text_color">#FFFFFFFF</color>
+    <color name="stroke_checkbox">#FF777A92</color>
+    <color name="hint_text">#FFFAFAFA</color>
+    <color name="checkbox_color">#FF161722</color>
+    <color name="light_text_color">#FF585B74</color>
 </resources>

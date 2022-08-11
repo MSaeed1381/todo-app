@@ -7,7 +7,7 @@
         <padding android:right="7dp"/>
         <padding android:top="7dp"/>
         <padding android:bottom="7dp"/>
-        <stroke android:color="@color/black" android:width="1dp"/>
+        <stroke android:color="@color/stroke_checkbox" android:width="1dp"/>
         <gradient android:startColor="#47DAFF" android:endColor="#E9BDFF" android:angle="-45"/>
     </shape>
 </item>

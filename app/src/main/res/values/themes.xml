@@ -12,5 +12,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/comic</item>
+
     </style>
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/comic</item>
+        <item name="color">#FF585B74</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Widget.TextView" parent="Widget.AppCompat.TextView">
+        <item name="color">#FF000000</item>
+    </style>
+
 </resources>

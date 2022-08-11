@@ -9,6 +9,7 @@ import com.example.todo_app.data.Task
 import com.example.todo_app.databinding.RowItemTaskBinding
 
 class TaskAdapter(
+    private val isNight: Boolean,
     private val tasks: List<Task>,
     private val function: (Task) -> Unit,
     private val update: (Task) -> Unit
@@ -20,7 +21,7 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(tasks[position], function, update)
+        holder.bind(isNight, tasks[position], function, update)
     }
 
     override fun getItemCount(): Int {
@@ -28,15 +29,23 @@ class TaskAdapter(
     }
 }
 class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.ViewHolder(binding.root){
- fun bind(task: Task, function: (Task) -> Unit, update: (Task) -> Unit){
+ fun bind(isNight: Boolean, task: Task, function: (Task) -> Unit, update: (Task) -> Unit){
      binding.checkBox.isChecked = task.situation
      binding.tvText.text = task.text
      if (task.situation){
+         if (isNight){
+             binding.tvText.setTextColor((0xFF777A92).toInt())
+         }else{
+             binding.tvText.setTextColor((0xFFd8d7d6).toInt())
+         }
          binding.tvText.paintFlags = binding.tvText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-         binding.tvText.setTextColor((0xFFd8d7d6).toInt())
      }else{
+         if (isNight){
+             binding.tvText.setTextColor((0xFFEAF6F6git).toInt())
+         }else{
+             binding.tvText.setTextColor((0xFF000000).toInt())
+         }
          binding.tvText.paintFlags = binding.tvText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-         binding.tvText.setTextColor((0xff000000).toInt())
      }
 
      binding.ibDelete.setOnClickListener {

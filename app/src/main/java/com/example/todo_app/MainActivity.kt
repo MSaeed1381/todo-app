@@ -33,21 +33,14 @@ class MainActivity : AppCompatActivity() {
         val dao = TaskDataBase.getInstance(application).taskDao
         val repository = TaskRepository(dao)
         val factory = TaskViewModelFactory(repository)
-        /*binding.checkBox2.setOnCheckedChangeListener {buttonView, isChecked ->
-            println("checked " + binding.checkBox2.isChecked.toString())
-            if (binding.checkBox2.isChecked) {
-                binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-            } else {
-                binding.imageView4.setImageResource(R.drawable.bg_mobile_light)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }*/
-        binding.checkBox2.setOnCheckedChangeListener { _, isChecked ->
+        binding.checkBox2.setOnCheckedChangeListener { _, _ ->
             if (binding.checkBox2.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
+                binding.recyclerView.adapter = TaskAdapter(binding.checkBox2.isChecked,viewModel.tasks.value!!, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
+                    checkBoxClicked(item)
+                }
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 binding.imageView4.setImageResource(R.drawable.bg_mobile_light)
@@ -109,9 +102,10 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         loadTasks(tasks)
     }
+
     private fun loadTasks(tasks: LiveData<List<Task>>){
         tasks.observe(this, Observer {
-            binding.recyclerView.adapter = TaskAdapter(it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
+            binding.recyclerView.adapter = TaskAdapter(binding.checkBox2.isChecked,it, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
                 checkBoxClicked(item)
             }
         })
