@@ -21,17 +21,14 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     var inputText = MutableLiveData<String>()
     @Bindable
     val inputSituation = MutableLiveData<Boolean>()
-    companion object{
-        var position = 1
-    }
-
+    
     init {
         inputText.value = ""
         inputSituation.value = false
     }
     fun addTask(){
         if (inputText.value!!.isNotBlank()){
-            insert(Task(0, inputText.value!!, inputSituation.value!!, position++))
+            insert(Task(0, inputText.value!!, inputSituation.value!!, tasks.value!!.size+1))
             inputText.value = ""
             inputSituation.value = false
         }

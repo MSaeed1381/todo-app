@@ -20,5 +20,6 @@ data class Task(
     var situation: Boolean,
 
     @ColumnInfo(name = "task_position")
-    var position: Int
+    var position: Int,
+
 )
