@@ -41,7 +41,7 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
          binding.tvText.paintFlags = binding.tvText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
      }else{
          if (isNight){
-             binding.tvText.setTextColor((0xFFEAF6F6git).toInt())
+             binding.tvText.setTextColor((0xFFE4E5F1).toInt())
          }else{
              binding.tvText.setTextColor((0xFF000000).toInt())
          }

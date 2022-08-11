@@ -12,7 +12,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.data.Task
 import com.example.todo_app.data.TaskDataBase
 import com.example.todo_app.data.TaskRepository
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
 
 
@@ -53,12 +56,6 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         initRecyclerView(viewModel.tasks)
-        /*if (list != null)
-            initRecyclerView(list!!)
-        else{
-            list = viewModel.tasks
-            initRecyclerView(viewModel.tasks)
-        }*/
 
         viewModel.inputText.observe(this, Observer {
             if (it.isNotBlank()){
@@ -78,24 +75,27 @@ class MainActivity : AppCompatActivity() {
         binding.tvClearCompleted.setOnClickListener {
             viewModel.deleteCompletedTask()
         }
-        /*item.observe(this) {
-            list = if (R.id.completedTasks == it) {
-                viewModel.completedTasks
-            } else if (R.id.activeTasks == it) {
-                viewModel.inProgressTasks
-            } else {
-                viewModel.tasks
-            }
-            initRecyclerView(list!!)
-        }
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            item.value = it.itemId
-            true
-        }*/
 
-       /* binding.ibAdd.setOnClickListener {
-            initRecyclerView(viewModel.tasks)
-        }*/
+        val moveOn: RecyclerViewMoveOn = object : RecyclerViewMoveOn(this){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val from = viewHolder.adapterPosition
+                val to = target.adapterPosition
+
+                val temp = viewModel.tasks.value?.get(from)!!.position
+                viewModel.tasks.value?.get(from)!!.position = viewModel.tasks.value?.get(to)!!.position
+                viewModel.tasks.value?.get(to)!!.position = temp
+
+                viewModel.update(viewModel.tasks.value?.get(from)!!, false)
+                viewModel.update(viewModel.tasks.value?.get(to)!!, false)
+                return false
+            }
+
+        }
+        ItemTouchHelper(moveOn).attachToRecyclerView(binding.recyclerView)
 
     }
     private fun initRecyclerView(tasks: LiveData<List<Task>>){
@@ -116,6 +116,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.deleteTask(task)
     }
     private fun checkBoxClicked(task: Task){
-        viewModel.update(task)
+        viewModel.update(task, true)
     }
 }
