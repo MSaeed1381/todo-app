@@ -7,7 +7,7 @@
     <data>
         <variable
             name="taskViewModel"
-            type="com.example.todo_app.TaskViewModel" />
+            type="com.example.todo_app.viewmodel.TaskViewModel" />
     </data>
 
 
@@ -261,7 +261,7 @@
             app:menu="@menu/main_menu" />
 
         <CheckBox
-            android:id="@+id/checkBox2"
+            android:id="@+id/nightLightCheckbox"
             android:layout_width="41dp"
             android:layout_height="52dp"
             android:button="@drawable/custom_night_light_switch"

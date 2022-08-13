@@ -1,5 +1,8 @@
 package com.example.todo_app.data
 
+import com.example.todo_app.data.dao.TaskDao
+import com.example.todo_app.data.entities.Task
+
 class TaskRepository(private val dao: TaskDao) {
     var tasks = dao.getAllTasks()
     var completedTasks = dao.getCompletedTasks()
@@ -14,9 +17,6 @@ class TaskRepository(private val dao: TaskDao) {
         dao.deleteTask(task)
     }
 
-    suspend fun deleteAll(){
-        dao.deleteAll()
-    }
 
     suspend fun update(task: Task){
         dao.updateTask(task)

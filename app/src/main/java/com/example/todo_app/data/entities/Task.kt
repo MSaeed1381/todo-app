@@ -1,10 +1,8 @@
-package com.example.todo_app.data
+package com.example.todo_app.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.todo_app.Situation
 
 
 @Entity (tableName = "task_table")

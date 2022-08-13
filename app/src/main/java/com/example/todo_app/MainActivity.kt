@@ -1,29 +1,33 @@
 package com.example.todo_app
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.todo_app.data.Task
-import com.example.todo_app.data.TaskDataBase
+import com.example.todo_app.adapter.TaskAdapter
 import com.example.todo_app.data.TaskRepository
+import com.example.todo_app.data.db.TaskDataBase
+import com.example.todo_app.data.entities.Task
 import com.example.todo_app.databinding.ActivityMainBinding
+import com.example.todo_app.recyclerFeatures.ItemMoveCallback
+import com.example.todo_app.viewmodel.TaskViewModel
+import com.example.todo_app.viewmodel.factory.TaskViewModelFactory
+
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    lateinit var viewModel: TaskViewModel
-    var adapter: TaskAdapter? = null
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: TaskViewModel
+    private var adapter: TaskAdapter? = null
     private var currentState: LiveData<List<Task>>? = null
 
-    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,11 +36,13 @@ class MainActivity : AppCompatActivity() {
         val repository = TaskRepository(dao)
         val factory = TaskViewModelFactory(repository)
 
-        binding.checkBox2.setOnCheckedChangeListener { _, _ ->
-            adapter!!.isNight = binding.checkBox2.isChecked
+        // night and dark mode implementation
+
+        binding.nightLightCheckbox.setOnCheckedChangeListener { _, _ ->
+            adapter!!.isNight = binding.nightLightCheckbox.isChecked
             binding.recyclerView.adapter = adapter
             updateList()
-            if (binding.checkBox2.isChecked) {
+            if (binding.nightLightCheckbox.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
             } else {
@@ -50,49 +56,45 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[TaskViewModel::class.java]
         binding.taskViewModel = viewModel
         binding.lifecycleOwner = this
-        viewModel.position.observe(this, Observer {
 
-        })
+        viewModel.tasks.observe(this) { updateList() }
+        viewModel.position.observe(this) {}
+        viewModel.completedTasks.observe(this) { updateList() }
 
 
-        viewModel.tasks.observe(this, Observer {
-            updateList()
-        })
-
+        // change state (all, active, completed)
         binding.bottomNavigationView.setOnItemSelectedListener {
-            currentState = if (it.itemId == R.id.allTasks){
-                viewModel.tasks
-            }else if (it.itemId == R.id.activeTasks){
-                viewModel.inProgressTasks
-            }else if (it.itemId == R.id.completedTasks){
-                viewModel.completedTasks
-            }else{
-                viewModel.tasks
+            currentState = when (it.itemId) {
+                R.id.allTasks -> {
+                    viewModel.tasks
+                }
+                R.id.activeTasks -> {
+                    viewModel.inProgressTasks.observe(this) {
+                        viewModel.inProgressTasks
+                    }
+                    viewModel.inProgressTasks
+                }
+                R.id.completedTasks -> {
+                    viewModel.completedTasks
+                }
+                else -> viewModel.tasks
             }
-            adapter!!.tasks = currentState!!.value!!
-            binding.recyclerView.adapter = adapter
-            adapter!!.notifyDataSetChanged()
+            updateList()
             false
         }
 
 
-
-        viewModel.inputText.observe(this, Observer {
-            if (it.isNotBlank()){
-                binding.ibAdd.visibility = View.VISIBLE
-            }else{
-                binding.ibAdd.visibility = View.INVISIBLE
-            }
-        })
+        // check edit text to add task
+        viewModel.inputText.observe(this) {
+            binding.ibAdd.visibility = if (it.isNotBlank()) View.VISIBLE else View.INVISIBLE
+        }
 
 
-        viewModel.inProgressTasks.observe(this, Observer {
-            updateList()
+
+        viewModel.inProgressTasks.observe(this) {
             binding.textView4.text = "${it.size} items left"
-        })
-        viewModel.completedTasks.observe(this, Observer {
             updateList()
-        })
+        }
 
 
 
@@ -100,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.deleteCompletedTask()
         }
 
-        val moveOn: RecyclerViewMoveOn = object : RecyclerViewMoveOn(this){
+        /*val moveOn: RecyclerViewMoveOn = object : RecyclerViewMoveOn(){
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -111,8 +113,7 @@ class MainActivity : AppCompatActivity() {
 
                 val temp = viewModel.tasks.value?.get(from)!!.position
                 viewModel.tasks.value?.get(from)!!.position = viewModel.tasks.value?.get(to)!!.position
-                viewModel.tasks.value?.get(to)!!.position = temp
-
+                viewModel.tasks.value?.get(to)!!.position = tem
                 viewModel.update(viewModel.tasks.value?.get(from)!!, false)
                 viewModel.update(viewModel.tasks.value?.get(to)!!, false)
                 return false
@@ -120,8 +121,9 @@ class MainActivity : AppCompatActivity() {
 
         }
         ItemTouchHelper(moveOn).attachToRecyclerView(binding.recyclerView)
-
+*/
     }
+
 
 
 
@@ -133,11 +135,21 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadTasks(tasks: LiveData<List<Task>>){
-        adapter = TaskAdapter(binding.checkBox2.isChecked,tasks.value!!, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
-            checkBoxClicked(item)
-        }
+        try {
+            adapter = TaskAdapter(tasks.value!!, { item: Task -> rowItemRemoveClick(item) }, { item: Task ->
+                checkBoxClicked(item)
+            }){
+                    item: Task, b:Boolean -> viewModel.update(item, b)
+            }
 
-        binding.recyclerView.adapter = adapter
+
+            val callback: ItemTouchHelper.Callback = ItemMoveCallback(adapter!!)
+            val touchHelper = ItemTouchHelper(callback)
+            touchHelper.attachToRecyclerView(binding.recyclerView)
+            binding.recyclerView.adapter = adapter
+        }catch (e: Exception){}
+
+
     }
 
 
@@ -154,8 +166,11 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updateList(){
-        if (adapter == null){
+        if (currentState == null){
             currentState = viewModel.tasks
+        }
+
+        if (adapter == null){
             initRecyclerView(currentState!!)
 
         }else{

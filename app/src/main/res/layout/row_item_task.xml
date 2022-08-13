@@ -7,7 +7,7 @@
     <data>
         <variable
             name="taskViewModel"
-            type="com.example.todo_app.TaskViewModel" />
+            type="com.example.todo_app.viewmodel.TaskViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
+                android:id="@+id/itemCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/costum_item_background"

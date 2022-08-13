@@ -1,4 +1,4 @@
-package com.example.todo_app
+package com.example.todo_app.viewmodel
 
 
 import androidx.databinding.Bindable
@@ -6,8 +6,8 @@ import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todo_app.data.Task
 import com.example.todo_app.data.TaskRepository
+import com.example.todo_app.data.entities.Task
 import kotlinx.coroutines.launch
 
 
@@ -49,11 +49,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
             repository.insert(task)
         }
     }
-    fun deleteAll(){
-        viewModelScope.launch {
-            repository.deleteAll()
-        }
-    }
+
     fun update(task: Task, sitChange: Boolean){
         if (sitChange){
             task.situation = !task.situation // toggle
