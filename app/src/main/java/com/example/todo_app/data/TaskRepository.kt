@@ -4,6 +4,7 @@ class TaskRepository(private val dao: TaskDao) {
     var tasks = dao.getAllTasks()
     var completedTasks = dao.getCompletedTasks()
     var inProgressTasks = dao.getInProgressTasks()
+    var maxPos = dao.getMaxPosition()
 
     suspend fun insert(task: Task){
         dao.insertTask(task)
@@ -23,6 +24,7 @@ class TaskRepository(private val dao: TaskDao) {
     suspend fun deleteCompletedTask(){
         dao.deleteCompletedTasks()
     }
+
 
 
 }

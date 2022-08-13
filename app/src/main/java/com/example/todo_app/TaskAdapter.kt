@@ -9,8 +9,8 @@ import com.example.todo_app.data.Task
 import com.example.todo_app.databinding.RowItemTaskBinding
 
 class TaskAdapter(
-    private val isNight: Boolean,
-    private val tasks: List<Task>,
+    var isNight: Boolean,
+    var tasks: List<Task>,
     private val function: (Task) -> Unit,
     private val update: (Task) -> Unit
 ): RecyclerView.Adapter<TaskViewHolder>() {
@@ -30,6 +30,7 @@ class TaskAdapter(
 }
 class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.ViewHolder(binding.root){
  fun bind(isNight: Boolean, task: Task, function: (Task) -> Unit, update: (Task) -> Unit){
+     println("salam")
      binding.checkBox.isChecked = task.situation
      binding.tvText.text = task.text
      if (task.situation){
@@ -41,7 +42,7 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
          binding.tvText.paintFlags = binding.tvText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
      }else{
          if (isNight){
-             binding.tvText.setTextColor((0xFFEAF6F6git).toInt())
+             binding.tvText.setTextColor((0xFFE4E5F1).toInt())
          }else{
              binding.tvText.setTextColor((0xFF000000).toInt())
          }

@@ -15,20 +15,24 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     val tasks = repository.tasks
     val completedTasks = repository.completedTasks
     val inProgressTasks = repository.inProgressTasks
+    var position = repository.maxPos
 
-    lateinit var task: Task
     @Bindable
     var inputText = MutableLiveData<String>()
     @Bindable
     val inputSituation = MutableLiveData<Boolean>()
-
+    
     init {
         inputText.value = ""
         inputSituation.value = false
     }
     fun addTask(){
         if (inputText.value!!.isNotBlank()){
-            insert(Task(0, inputText.value!!, inputSituation.value!!))
+            var p = 1
+            if (position.value != null){
+                p = position.value!! + 1
+            }
+            insert(Task(0, inputText.value!!, inputSituation.value!!, p))
             inputText.value = ""
             inputSituation.value = false
         }
@@ -49,8 +53,11 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
             repository.deleteAll()
         }
     }
-    fun update(task: Task){
-        task.situation = !task.situation // toggle
+    fun update(task: Task, sitChange: Boolean){
+        if (sitChange){
+            task.situation = !task.situation // toggle
+        }
+
         viewModelScope.launch {
             println(task.situation)
             repository.update(task)

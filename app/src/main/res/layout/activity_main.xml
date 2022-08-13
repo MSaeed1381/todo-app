@@ -151,7 +151,7 @@
                     android:hint="Create a new todo..."
                     android:inputType="textPersonName"
                     android:text="@={taskViewModel.inputText}"
-                    android:textColor="@color/light_text_color"
+                    android:textColor="@color/text_color"
                     android:textColorHint="@color/light_text_color"
                     android:textSize="15sp" />
 
