@@ -133,9 +133,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun loadTasks(tasks: LiveData<List<Task>>){
-            adapter = TaskAdapter(binding.checkBox2.isChecked,tasks.value!!, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
-                checkBoxClicked(item)
-            }
+        adapter = TaskAdapter(binding.checkBox2.isChecked,tasks.value!!, { item: Task -> rowItemRemoveClick(item) }) { item: Task ->
+            checkBoxClicked(item)
+        }
 
         binding.recyclerView.adapter = adapter
     }

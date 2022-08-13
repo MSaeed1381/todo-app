@@ -33,6 +33,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
                 p = position.value!! + 1
             }
             insert(Task(0, inputText.value!!, inputSituation.value!!, p))
+
             inputText.value = ""
             inputSituation.value = false
         }
