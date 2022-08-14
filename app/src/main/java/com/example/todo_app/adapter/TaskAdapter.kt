@@ -1,22 +1,18 @@
 package com.example.todo_app.adapter
 
-import android.R.attr.data
-import android.R.attr.switchTextAppearance
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.ListAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.R
 import com.example.todo_app.data.entities.Task
 import com.example.todo_app.databinding.RowItemTaskBinding
 import com.example.todo_app.recyclerFeatures.ItemMoveCallback
 import java.util.*
+import java.util.Collections.sort
 
 
 class TaskAdapter(
@@ -45,35 +41,38 @@ class TaskAdapter(
 
 
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
+                Collections.swap(tasks, i, i + 1)
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i+1].position
                 tasks[i+1].position = temp
-                updateFunc(tasks[i], false)
-                updateFunc(tasks[i+1], false)
+                sort(tasks)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(tasks, i, i - 1);
+                Collections.swap(tasks, i, i - 1)
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i-1].position
                 tasks[i-1].position = temp
-                updateFunc(tasks[i], false)
-                updateFunc(tasks[i-1], false)
+                sort(tasks)
             }
         }
-        notifyDataSetChanged()
+        notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onRowSelected(myViewHolder: TaskViewHolder?) {
-        myViewHolder!!.setBackGround((0xFFE5E4E2).toInt());
+        myViewHolder!!.setBackGround((0xFFE5E4E2).toInt())
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onRowClear(myViewHolder: TaskViewHolder?) {
-        myViewHolder!!.setBackGround(Color.WHITE);
+        for (task in tasks){
+            updateFunc(task, false)
+        }
+        notifyDataSetChanged()
+        myViewHolder!!.setBackGround(Color.WHITE)
     }
 
 
