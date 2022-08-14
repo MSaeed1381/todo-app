@@ -7,7 +7,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.ListAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.R
 import com.example.todo_app.data.entities.Task
@@ -21,7 +24,7 @@ class TaskAdapter(
     private val changeSituation: (Task) -> Unit,
     private val update: (Task) -> Unit,
     val updateFunc: (Task, Boolean) -> Unit
-): RecyclerView.Adapter<TaskViewHolder>(), ItemMoveCallback.ItemTouchHelperContract {
+): RecyclerView.Adapter <TaskViewHolder>(), ItemMoveCallback.ItemTouchHelperContract {
 
     var isNight: Boolean = false
 

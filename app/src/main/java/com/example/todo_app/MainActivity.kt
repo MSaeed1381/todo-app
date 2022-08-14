@@ -65,19 +65,22 @@ class MainActivity : AppCompatActivity() {
         // change state (all, active, completed)
         binding.bottomNavigationView.setOnItemSelectedListener {
             currentState = when (it.itemId) {
-                R.id.allTasks -> {
-                    viewModel.tasks
-                }
                 R.id.activeTasks -> {
+                    it.isChecked = true
                     viewModel.inProgressTasks.observe(this) {
                         viewModel.inProgressTasks
                     }
                     viewModel.inProgressTasks
                 }
                 R.id.completedTasks -> {
+                    it.isChecked = true
                     viewModel.completedTasks
                 }
-                else -> viewModel.tasks
+
+                else ->{
+                    it.isChecked = true
+                    viewModel.tasks
+                }
             }
             updateList()
             false
@@ -101,27 +104,6 @@ class MainActivity : AppCompatActivity() {
         binding.tvClearCompleted.setOnClickListener {
             viewModel.deleteCompletedTask()
         }
-
-        /*val moveOn: RecyclerViewMoveOn = object : RecyclerViewMoveOn(){
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                val from = viewHolder.adapterPosition
-                val to = target.adapterPosition
-
-                val temp = viewModel.tasks.value?.get(from)!!.position
-                viewModel.tasks.value?.get(from)!!.position = viewModel.tasks.value?.get(to)!!.position
-                viewModel.tasks.value?.get(to)!!.position = tem
-                viewModel.update(viewModel.tasks.value?.get(from)!!, false)
-                viewModel.update(viewModel.tasks.value?.get(to)!!, false)
-                return false
-            }
-
-        }
-        ItemTouchHelper(moveOn).attachToRecyclerView(binding.recyclerView)
-*/
     }
 
 
@@ -147,9 +129,9 @@ class MainActivity : AppCompatActivity() {
             val touchHelper = ItemTouchHelper(callback)
             touchHelper.attachToRecyclerView(binding.recyclerView)
             binding.recyclerView.adapter = adapter
-        }catch (e: Exception){}
-
-
+        }catch (e: Exception){
+            println("exception occurred")
+        }
     }
 
 
@@ -171,6 +153,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (adapter == null){
+            println("init data set")
             initRecyclerView(currentState!!)
 
         }else{

@@ -16,4 +16,5 @@
     <color name="hint_text">#FFFAFAFA</color>
     <color name="checkbox_color">#FF161722</color>
     <color name="light_text_color">#FF585B74</color>
+    <color name="selected_menu_color">#FF00FFFF</color>
 </resources>

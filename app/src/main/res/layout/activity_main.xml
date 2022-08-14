@@ -254,7 +254,7 @@
             app:itemActiveIndicatorStyle="@style/Widget.BottomNavigationView"
             app:itemIconSize="22dp"
             app:itemRippleColor="@color/text_color"
-            app:itemTextColor="@color/light_text_color"
+            app:itemTextColor="@color/drawer_item"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/cardView3"
