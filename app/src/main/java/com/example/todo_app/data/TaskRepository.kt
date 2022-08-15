@@ -4,7 +4,7 @@ import com.example.todo_app.data.dao.TaskDao
 import com.example.todo_app.data.entities.Task
 
 class TaskRepository(private val dao: TaskDao) {
-    var tasks = dao.getAllTasks()
+    var tasks = dao.getAllTasks() //TODO
     var completedTasks = dao.getCompletedTasks()
     var inProgressTasks = dao.getInProgressTasks()
     var maxPos = dao.getMaxPosition()

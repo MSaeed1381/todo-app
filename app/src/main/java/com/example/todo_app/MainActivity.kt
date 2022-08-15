@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             currentState = when (it.itemId) {
                 R.id.activeTasks -> {
                     it.isChecked = true
-                    viewModel.inProgressTasks.observe(this) {
+                    viewModel.inProgressTasks.observe(this) { //TODO
                         viewModel.inProgressTasks
                     }
                     viewModel.inProgressTasks
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             println("init data set")
             initRecyclerView(currentState!!)
 
-        }else{
+        }else{ //TODO
             adapter!!.tasks = currentState!!.value!!
             binding.recyclerView.adapter = adapter
             adapter!!.notifyDataSetChanged()

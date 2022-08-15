@@ -48,7 +48,7 @@ class TaskAdapter(
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i+1].position
                 tasks[i+1].position = temp
-                sort(tasks)
+                //sort(tasks)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
@@ -56,14 +56,14 @@ class TaskAdapter(
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i-1].position
                 tasks[i-1].position = temp
-                sort(tasks)
+                //sort(tasks)
             }
         }
         notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onRowSelected(myViewHolder: TaskViewHolder?) {
-        myViewHolder!!.setBackGround((0xFFE5E4E2).toInt())
+        myViewHolder!!.setBackGround((0xFFF5F5F5).toInt())
     }
 
     @SuppressLint("NotifyDataSetChanged")
