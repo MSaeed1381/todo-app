@@ -6,13 +6,14 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todo_app.R
 import com.example.todo_app.data.entities.Task
 import com.example.todo_app.databinding.RowItemTaskBinding
 import com.example.todo_app.recyclerFeatures.ItemMoveCallback
 import java.util.*
-import java.util.Collections.sort
 
 
 class TaskAdapter(
@@ -20,7 +21,7 @@ class TaskAdapter(
     private val changeSituation: (Task) -> Unit,
     private val update: (Task) -> Unit,
     val updateFunc: (Task, Boolean) -> Unit
-): RecyclerView.Adapter <TaskViewHolder>(), ItemMoveCallback.ItemTouchHelperContract {
+): ListAdapter <Task, TaskViewHolder>(DiffCallback()), ItemMoveCallback.ItemTouchHelperContract {
 
     var isNight: Boolean = false
 
@@ -33,10 +34,6 @@ class TaskAdapter(
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(isNight, tasks[position], changeSituation, update)
-    }
-
-    override fun getItemCount(): Int {
-        return tasks.size
     }
 
 
@@ -72,9 +69,9 @@ class TaskAdapter(
         notifyDataSetChanged()
         myViewHolder!!.setBackGround(Color.WHITE)
     }
-
-
 }
+
+
 class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.ViewHolder(binding.root){
  fun bind(isNight: Boolean, task: Task, changeSituation: (Task) -> Unit, update: (Task) -> Unit){
      binding.checkBox.isChecked = task.situation
@@ -104,6 +101,18 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
  }
     fun setBackGround(color: Int){
         binding.itemCardView.setBackgroundColor(color)
+    }
+
+}
+
+
+class DiffCallback : DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+        return oldItem == newItem
     }
 
 }

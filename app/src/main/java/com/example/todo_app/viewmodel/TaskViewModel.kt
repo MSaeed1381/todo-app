@@ -26,9 +26,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     }
     fun addTask(){
         if (inputText.value!!.isNotBlank()){
-
             insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
-
             inputText.value = ""
             inputSituation.value = false
         }
@@ -49,12 +47,12 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         if (sitChange){
             task.situation = !task.situation // toggle
         }
-
         viewModelScope.launch {
             println(task.situation)
             repository.update(task)
         }
     }
+
     fun deleteCompletedTask(){
         viewModelScope.launch {
             repository.deleteCompletedTask()
@@ -105,9 +103,12 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     }
     fun getArrayTasks(): ArrayList<Task>{
         val arrayTasks = ArrayList<Task>()
-        for (task in tasks.value!!){
-            arrayTasks.add(task)
+        if (tasks.value != null){
+            for (task in tasks.value!!){
+                arrayTasks.add(task)
+            }
         }
+
         return arrayTasks
     }
 
