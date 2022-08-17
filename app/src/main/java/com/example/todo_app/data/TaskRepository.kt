@@ -1,14 +1,30 @@
 package com.example.todo_app.data
 
+import androidx.lifecycle.LiveData
 import com.example.todo_app.data.dao.TaskDao
 import com.example.todo_app.data.entities.Task
 
-class TaskRepository(private val dao: TaskDao) {
-    var tasks = dao.getAllTasks() //TODO
-    var completedTasks = dao.getCompletedTasks()
-    var inProgressTasks = dao.getInProgressTasks()
-    var maxPos = dao.getMaxPosition()
+// singleton class
 
+class TaskRepository private constructor(private val dao: TaskDao) {
+
+    companion object {
+        private var instance: TaskRepository? = null
+
+        fun getInstance(dao: TaskDao): TaskRepository {
+            synchronized(this) { // thread safe
+                if (instance == null) {
+                    instance = TaskRepository(dao = dao)
+                }
+            }
+        return instance!!
+        }
+    }
+
+
+    fun getAllTasks(): LiveData<List<Task>> {
+        return dao.getAllTasks()
+    }
     suspend fun insert(task: Task){
         dao.insertTask(task)
     }
@@ -24,7 +40,5 @@ class TaskRepository(private val dao: TaskDao) {
     suspend fun deleteCompletedTask(){
         dao.deleteCompletedTasks()
     }
-
-
 
 }

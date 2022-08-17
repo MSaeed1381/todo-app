@@ -48,7 +48,6 @@ class TaskAdapter(
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i+1].position
                 tasks[i+1].position = temp
-                //sort(tasks)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
@@ -56,7 +55,6 @@ class TaskAdapter(
                 val temp = tasks[i].position
                 tasks[i].position = tasks[i-1].position
                 tasks[i-1].position = temp
-                //sort(tasks)
             }
         }
         notifyItemMoved(fromPosition, toPosition)

@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: TaskViewModel
     private var adapter: TaskAdapter? = null
-    private var currentState: LiveData<List<Task>>? = null
+    private var currentState = "all"
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         val dao = TaskDataBase.getInstance(application).taskDao
-        val repository = TaskRepository(dao)
+        val repository = TaskRepository.getInstance(dao)
         val factory = TaskViewModelFactory(repository)
 
         // night and dark mode implementation
@@ -57,9 +57,11 @@ class MainActivity : AppCompatActivity() {
         binding.taskViewModel = viewModel
         binding.lifecycleOwner = this
 
-        viewModel.tasks.observe(this) { updateList() }
-        viewModel.position.observe(this) {}
-        viewModel.completedTasks.observe(this) { updateList() }
+        viewModel.getTasks().observe(this) {
+            updateList()
+            binding.textView4.text = "${viewModel.getActiveTasks().size} items left"
+
+        }
 
 
         // change state (all, active, completed)
@@ -67,19 +69,19 @@ class MainActivity : AppCompatActivity() {
             currentState = when (it.itemId) {
                 R.id.activeTasks -> {
                     it.isChecked = true
-                    viewModel.inProgressTasks.observe(this) { //TODO
-                        viewModel.inProgressTasks
-                    }
-                    viewModel.inProgressTasks
+                    //viewModel.getActiveTasks()
+                    "active"
                 }
                 R.id.completedTasks -> {
                     it.isChecked = true
-                    viewModel.completedTasks
+                   //viewModel.getCompletedTasks()
+                    "completed"
                 }
 
                 else ->{
                     it.isChecked = true
-                    viewModel.tasks
+                    //viewModel.getArrayTasks()
+                    "all"
                 }
             }
             updateList()
@@ -94,10 +96,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        viewModel.inProgressTasks.observe(this) {
+        /*viewModel.inProgressTasks.observe(this) {
             binding.textView4.text = "${it.size} items left"
             updateList()
-        }
+        }*/
 
 
 
@@ -109,16 +111,16 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun initRecyclerView(tasks: LiveData<List<Task>>){
+    private fun initRecyclerView(tasks: ArrayList<Task>){
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         loadTasks(tasks)
     }
 
 
 
-    private fun loadTasks(tasks: LiveData<List<Task>>){
+    private fun loadTasks(tasks: ArrayList<Task>){
         try {
-            adapter = TaskAdapter(tasks.value!!, { item: Task -> rowItemRemoveClick(item) }, { item: Task ->
+            adapter = TaskAdapter(tasks, { item: Task -> rowItemRemoveClick(item) }, { item: Task ->
                 checkBoxClicked(item)
             }){
                     item: Task, b:Boolean -> viewModel.update(item, b)
@@ -148,16 +150,20 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updateList(){
-        if (currentState == null){
-            currentState = viewModel.tasks
+        var state = viewModel.getArrayTasks()
+        if (currentState == "active"){
+            state = viewModel.getActiveTasks()
+        }else if (currentState == "completed"){
+            state = viewModel.getCompletedTasks()
         }
 
         if (adapter == null){
             println("init data set")
-            initRecyclerView(currentState!!)
+            initRecyclerView(state)
+
 
         }else{ //TODO
-            adapter!!.tasks = currentState!!.value!!
+            adapter!!.tasks = state
             binding.recyclerView.adapter = adapter
             adapter!!.notifyDataSetChanged()
         }
