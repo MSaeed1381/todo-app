@@ -20,4 +20,4 @@ light mode             |  dark mode
 
 
 # installation
-[Visit this dive!](https://drive.google.com/file/d/13cYYe_KWJ7Lc9ynsdrNvIwy_5uTD51jM/view?usp=sharing)
+[Visit this drive!](https://drive.google.com/file/d/13cYYe_KWJ7Lc9ynsdrNvIwy_5uTD51jM/view?usp=sharing)
