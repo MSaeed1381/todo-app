@@ -268,7 +268,8 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="@+id/guideline7"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

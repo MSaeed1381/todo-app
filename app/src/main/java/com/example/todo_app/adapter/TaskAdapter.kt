@@ -1,7 +1,6 @@
 package com.example.todo_app.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -36,29 +35,22 @@ class TaskAdapter(
         holder.bind(isNight, tasks[position], changeSituation, update)
     }
 
-
-
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(tasks, i, i + 1)
-                val temp = tasks[i].position
-                tasks[i].position = tasks[i+1].position
-                tasks[i+1].position = temp
+                changePosition(i, i+1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(tasks, i, i - 1)
-                val temp = tasks[i].position
-                tasks[i].position = tasks[i-1].position
-                tasks[i-1].position = temp
+                changePosition(i, i-1)
             }
         }
+
         notifyItemMoved(fromPosition, toPosition)
     }
 
     override fun onRowSelected(myViewHolder: TaskViewHolder?) {
-        myViewHolder!!.setBackGround((0xFFF5F5F5).toInt())
+        myViewHolder!!.setBackGround((0xFFF5F5F5))
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -66,8 +58,19 @@ class TaskAdapter(
         for (task in tasks){
             updateFunc(task, false)
         }
-        notifyDataSetChanged()
-        myViewHolder!!.setBackGround(Color.WHITE)
+        this.submitList(tasks)
+
+        if (isNight)
+            myViewHolder!!.setBackGround(0xFF34364C)
+        else
+            myViewHolder!!.setBackGround(0xFFFFFFFF)
+    }
+
+    private fun changePosition(from: Int, to: Int){
+        Collections.swap(tasks, from, to)
+        val temp = tasks[from].position
+        tasks[from].position = tasks[to].position
+        tasks[to].position = temp
     }
 }
 
@@ -99,20 +102,14 @@ class TaskViewHolder(private val binding: RowItemTaskBinding): RecyclerView.View
          update(task)
      }
  }
-    fun setBackGround(color: Int){
-        binding.itemCardView.setBackgroundColor(color)
+    fun setBackGround(color: Long){
+        binding.itemCardView.setBackgroundColor(color.toInt())
     }
 
 }
 
 
 class DiffCallback : DiffUtil.ItemCallback<Task>() {
-    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
-        return oldItem == newItem
-    }
-
+        override fun areItemsTheSame(oldItem: Task, newItem: Task) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Task, newItem: Task) = oldItem == newItem
 }

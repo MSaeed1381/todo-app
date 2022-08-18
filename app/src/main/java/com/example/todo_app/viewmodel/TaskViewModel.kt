@@ -1,14 +1,17 @@
 package com.example.todo_app.viewmodel
 
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todo_app.R
 import com.example.todo_app.data.TaskRepository
 import com.example.todo_app.data.entities.Task
+import com.example.todo_app.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
 
@@ -24,6 +27,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         inputText.value = ""
         inputSituation.value = false
     }
+
     fun addTask(){
         if (inputText.value!!.isNotBlank()){
             insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
@@ -108,7 +112,6 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
                 arrayTasks.add(task)
             }
         }
-
         return arrayTasks
     }
 
