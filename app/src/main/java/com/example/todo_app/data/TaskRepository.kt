@@ -22,7 +22,7 @@ class TaskRepository private constructor(private val dao: TaskDao) {
     }
 
 
-    fun getAllTasks(): LiveData<List<Task>> {
+     fun getAllTasks(): LiveData<List<Task>> {
         return dao.getAllTasks()
     }
     suspend fun insert(task: Task){

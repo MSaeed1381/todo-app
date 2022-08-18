@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observable {
-    private val tasks = repository.getAllTasks()
+    private var tasks =  repository.getAllTasks()
+
 
     @Bindable
     var inputText = MutableLiveData<String>()
@@ -24,11 +25,14 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         inputText.value = ""
         inputSituation.value = false
     }
+
+    fun getTasks(): LiveData<List<Task>>{
+        return tasks
+    }
+
     fun addTask(){
         if (inputText.value!!.isNotBlank()){
-
             insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
-
             inputText.value = ""
             inputSituation.value = false
         }
@@ -49,12 +53,11 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         if (sitChange){
             task.situation = !task.situation // toggle
         }
-
         viewModelScope.launch {
-            println(task.situation)
             repository.update(task)
         }
     }
+
     fun deleteCompletedTask(){
         viewModelScope.launch {
             repository.deleteCompletedTask()
@@ -82,11 +85,11 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
 
     fun getActiveTasks(): ArrayList<Task>{
         val activeTasks = ArrayList<Task>()
-        for (task in tasks.value!!){
-            if (!task.situation){
-                activeTasks.add(task)
+            for (task in tasks.value!!){
+                if (!task.situation){
+                    activeTasks.add(task)
+                }
             }
-        }
         return activeTasks
     }
 
@@ -100,14 +103,14 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         return max
     }
 
-    fun getTasks() :LiveData<List<Task>>{
-        return this.tasks
-    }
     fun getArrayTasks(): ArrayList<Task>{
         val arrayTasks = ArrayList<Task>()
-        for (task in tasks.value!!){
-            arrayTasks.add(task)
+        if (tasks.value != null){
+            for (task in tasks.value!!){
+                arrayTasks.add(task)
+            }
         }
+
         return arrayTasks
     }
 
