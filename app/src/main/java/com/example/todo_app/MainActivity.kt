@@ -110,10 +110,9 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun checkBoxClicked(task: Task){
         viewModel.update(task, true)
-        adapter.notifyDataSetChanged()
+
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateList(){
         var state = viewModel.getArrayTasks()
         if (currentState == "active"){

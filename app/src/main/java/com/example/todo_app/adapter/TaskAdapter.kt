@@ -48,7 +48,6 @@ class TaskAdapter(
                 swapPosition(i, i-1)
             }
         }
-        // notifyItemMoved(fromPosition, toPosition)
     }
 
 
