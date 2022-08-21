@@ -23,4 +23,7 @@ interface TaskDao {
     @Query("DELETE FROM task_table WHERE task_situation == 1")
     suspend fun deleteCompletedTasks()
 
+    @Query("update task_table set task_position = :pos where task_id = :id")
+    suspend fun updatePositions(id: Int, pos: Int)
+
 }

@@ -1,20 +1,21 @@
 package com.example.todo_app.data
 
+import android.content.Context
 import androidx.lifecycle.LiveData
-import com.example.todo_app.data.dao.TaskDao
+import com.example.todo_app.data.db.TaskDataBase
 import com.example.todo_app.data.entities.Task
 
 // singleton class
 
-class TaskRepository private constructor(private val dao: TaskDao) {
+class TaskRepository private constructor(private val dataBase: TaskDataBase) {
 
     companion object {
         private var instance: TaskRepository? = null
 
-        fun getInstance(dao: TaskDao): TaskRepository {
+        fun getInstance(context: Context): TaskRepository {
             synchronized(this) { // thread safe
                 if (instance == null) {
-                    instance = TaskRepository(dao = dao)
+                    instance = TaskRepository(TaskDataBase.getInstance(context))
                 }
             }
         return instance!!
@@ -23,22 +24,26 @@ class TaskRepository private constructor(private val dao: TaskDao) {
 
 
      fun getAllTasks(): LiveData<List<Task>> {
-        return dao.getAllTasks()
+        return dataBase.taskDao.getAllTasks()
     }
     suspend fun insert(task: Task){
-        dao.insertTask(task)
+        dataBase.taskDao.insertTask(task)
     }
 
     suspend fun delete(task: Task){
-        dao.deleteTask(task)
+        dataBase.taskDao.deleteTask(task)
     }
 
 
     suspend fun update(task: Task){
-        dao.updateTask(task)
+        dataBase.taskDao.updateTask(task)
     }
     suspend fun deleteCompletedTask(){
-        dao.deleteCompletedTasks()
+        dataBase.taskDao.deleteCompletedTasks()
+    }
+
+    suspend fun updateIndexes(id: Int, pos: Int){
+        dataBase.taskDao.updatePositions(id, pos)
     }
 
 }

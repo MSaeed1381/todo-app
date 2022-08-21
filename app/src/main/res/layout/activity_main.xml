@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+
         <variable
             name="taskViewModel"
             type="com.example.todo_app.viewmodel.TaskViewModel" />
@@ -162,8 +164,9 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/custom_add_button"
-                    android:onClick="@{()->taskViewModel.addTask()}"
-                    android:visibility="invisible"
+                    android:onClick="@{()->taskViewModel.insert()}"
+
+                    android:visibility="@{taskViewModel.inputText.length() == 0 ? View.INVISIBLE  : View.VISIBLE}"
                     tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -231,7 +234,8 @@
                             android:fontFamily="@font/comic"
                             android:gravity="center"
                             android:text="Clear Completed"
-                            android:textColor="@color/light_text_color" />
+                            android:textColor="@color/light_text_color"
+                            android:onClick="@{() -> taskViewModel.deleteCompletedTask()}"/>
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -273,3 +277,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+

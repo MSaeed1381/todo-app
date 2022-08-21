@@ -2,6 +2,7 @@ package com.example.todo_app.adapter
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -19,7 +20,7 @@ import kotlin.collections.ArrayList
 class TaskAdapter(
     private val changeSituation: (Task) -> Unit,
     private val update: (Task) -> Unit,
-    private val updateFunc: (Task, Boolean) -> Unit
+    private val updateFunc: (ArrayList<Task>) -> Unit
 ): ListAdapter <Task, TaskViewHolder>(DiffCallback()), ItemMoveCallback.ItemTouchHelperContract {
     private var isNight: Boolean = false
 
@@ -39,6 +40,7 @@ class TaskAdapter(
 
 
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        Log.i("onRowMoved", "$fromPosition $toPosition")
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 swapPosition(i, i+1)
@@ -51,7 +53,8 @@ class TaskAdapter(
     }
 
 
-    private fun swapPosition(from: Int, to: Int){
+    private fun swapPosition(from: Int, to: Int) {
+        Log.i("swap", "$from $to")
         val newList = currentList.toMutableList()
         val temp = newList[from].position
         newList[from].position = newList[to].position
@@ -61,23 +64,14 @@ class TaskAdapter(
     }
 
 
-    override fun submitList(list: List<Task>?) {
-        super.submitList(list?.let { ArrayList(it) })
-    }
-
     override fun onRowSelected(myViewHolder: TaskViewHolder?) {
        myViewHolder!!.setColorBackground((0xFFF5F5F5).toInt())
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onRowClear(myViewHolder: TaskViewHolder?) {
-
-       for (task in currentList.toMutableList()){
-            updateFunc(task, false)
-       }
-
-        notifyDataSetChanged()
         myViewHolder!!.setBackground(R.drawable.costum_item_background)
+        updateFunc(currentList.toMutableList() as ArrayList<Task>)
     }
 }
 

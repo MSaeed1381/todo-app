@@ -2,7 +2,6 @@ package com.example.todo_app
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todo_app.adapter.TaskAdapter
 import com.example.todo_app.data.TaskRepository
-import com.example.todo_app.data.db.TaskDataBase
 import com.example.todo_app.data.entities.Task
 import com.example.todo_app.databinding.ActivityMainBinding
 import com.example.todo_app.recyclerFeatures.ItemMoveCallback
@@ -32,10 +30,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val dao = TaskDataBase.getInstance(application).taskDao
-        val repository = TaskRepository.getInstance(dao)
+        val repository = TaskRepository.getInstance(application)
         val factory = TaskViewModelFactory(repository)
-        // night and dark mode implementation
 
         binding.nightLightCheckbox.setOnCheckedChangeListener { _, _ ->
             adapter.setLightMode(binding.nightLightCheckbox.isChecked)
@@ -70,15 +66,6 @@ class MainActivity : AppCompatActivity() {
             updateList()
             false
         }
-
-
-        // check edit text to add task
-        viewModel.inputText.observe(this) {
-            binding.ibAdd.visibility = if (it.isNotBlank()) View.VISIBLE else View.INVISIBLE
-        }
-        binding.tvClearCompleted.setOnClickListener {
-            viewModel.deleteCompletedTask()
-        }
     }
 
     private fun initRecyclerView(){
@@ -91,11 +78,10 @@ class MainActivity : AppCompatActivity() {
             adapter = TaskAdapter(
                 { item: Task -> rowItemRemoveClick(item) },
                 { item: Task -> checkBoxClicked(item)    })
-                { item: Task, b:Boolean -> viewModel.update(item, b) }
+                { list: ArrayList<Task> -> viewModel.updateAllTasks(list) }
 
-            val callback: ItemTouchHelper.Callback = ItemMoveCallback(adapter)
-            val touchHelper = ItemTouchHelper(callback)
-            touchHelper.attachToRecyclerView(binding.recyclerView)
+            ItemTouchHelper(ItemMoveCallback(adapter)).attachToRecyclerView(binding.recyclerView)
+
             binding.recyclerView.adapter = adapter
         }catch (e: Exception){
             println("exception occurred")
@@ -110,6 +96,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun checkBoxClicked(task: Task){
         viewModel.update(task, true)
+        adapter.notifyDataSetChanged()
 
     }
 

@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 
 
 class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observable {
+
     private var tasks =  repository.getAllTasks()
 
 
@@ -22,30 +23,24 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     val inputSituation = MutableLiveData<Boolean>()
     
     init {
-        inputText.value = ""
-        inputSituation.value = false
+        resetViews()
     }
 
     fun getTasks(): LiveData<List<Task>>{
         return tasks
     }
 
-    fun addTask(){
-        if (inputText.value!!.isNotBlank()){
-            insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
-            inputText.value = ""
-            inputSituation.value = false
-        }
-    }
     fun deleteTask(task: Task){
         viewModelScope.launch {
             repository.delete(task)
         }
     }
 
-    private fun insert(task: Task){
+    fun insert(){
         viewModelScope.launch {
-            repository.insert(task)
+            repository.insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
+
+            resetViews()
         }
     }
 
@@ -58,13 +53,24 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
         }
     }
 
+    fun updateAllTasks(tasks: ArrayList<Task>){
+        viewModelScope.launch {
+            for (task in tasks){
+                repository.updateIndexes(task.id, task.position)
+            }
+        }
+    }
+
     fun deleteCompletedTask(){
         viewModelScope.launch {
             repository.deleteCompletedTask()
         }
     }
 
-
+    private fun resetViews(){
+        inputText.value = ""
+        inputSituation.value = false
+    }
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
 
     }
