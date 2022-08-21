@@ -2,6 +2,7 @@ package com.example.todo_app.data
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.room.withTransaction
 import com.example.todo_app.data.db.TaskDataBase
 import com.example.todo_app.data.entities.Task
 
@@ -42,8 +43,12 @@ class TaskRepository private constructor(private val dataBase: TaskDataBase) {
         dataBase.taskDao.deleteCompletedTasks()
     }
 
-    suspend fun updateIndexes(id: Int, pos: Int){
-        dataBase.taskDao.updatePositions(id, pos)
+    suspend fun updateIndexes(tasks: ArrayList<Task>){
+        dataBase.withTransaction {
+            for (i in 0 until tasks.size) {
+                dataBase.taskDao.updatePositions(tasks[i].id, i+1)
+            }
+        }
     }
 
 }

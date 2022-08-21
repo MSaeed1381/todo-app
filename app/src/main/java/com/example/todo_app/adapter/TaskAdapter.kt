@@ -1,8 +1,6 @@
 package com.example.todo_app.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -40,7 +38,6 @@ class TaskAdapter(
 
 
     override fun onRowMoved(fromPosition: Int, toPosition: Int) {
-        Log.i("onRowMoved", "$fromPosition $toPosition")
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 swapPosition(i, i+1)
@@ -54,11 +51,7 @@ class TaskAdapter(
 
 
     private fun swapPosition(from: Int, to: Int) {
-        Log.i("swap", "$from $to")
         val newList = currentList.toMutableList()
-        val temp = newList[from].position
-        newList[from].position = newList[to].position
-        newList[to].position = temp
         Collections.swap(newList, from, to)
         submitList(newList)
     }
@@ -68,10 +61,9 @@ class TaskAdapter(
        myViewHolder!!.setColorBackground((0xFFF5F5F5).toInt())
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onRowClear(myViewHolder: TaskViewHolder?) {
         myViewHolder!!.setBackground(R.drawable.costum_item_background)
-        updateFunc(currentList.toMutableList() as ArrayList<Task>)
+        updateFunc(currentList.toList() as ArrayList<Task>)
     }
 }
 

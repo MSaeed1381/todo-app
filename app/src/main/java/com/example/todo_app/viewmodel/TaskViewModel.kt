@@ -39,7 +39,6 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
     fun insert(){
         viewModelScope.launch {
             repository.insert(Task(0, inputText.value!!, inputSituation.value!!, findMaxPosition()+1))
-
             resetViews()
         }
     }
@@ -55,9 +54,7 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
 
     fun updateAllTasks(tasks: ArrayList<Task>){
         viewModelScope.launch {
-            for (task in tasks){
-                repository.updateIndexes(task.id, task.position)
-            }
+            repository.updateIndexes(tasks)
         }
     }
 
@@ -101,9 +98,11 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
 
     private fun findMaxPosition(): Int{
       var max = 0
-        for (task in tasks.value!!){
-            if (task.position > max){
-                max = task.position
+        if (tasks.value != null){
+            for (task in tasks.value!!){
+                if (task.position > max){
+                    max = task.position
+                }
             }
         }
         return max
@@ -116,7 +115,6 @@ class TaskViewModel(private val repository: TaskRepository): ViewModel(), Observ
                 arrayTasks.add(task)
             }
         }
-
         return arrayTasks
     }
 

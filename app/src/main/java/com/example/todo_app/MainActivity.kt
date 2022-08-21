@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.nightLightCheckbox.setOnCheckedChangeListener { _, _ ->
             adapter.setLightMode(binding.nightLightCheckbox.isChecked)
+            binding.bottomNavigationView.selectedItemId = R.id.allTasks
             if (binding.nightLightCheckbox.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 binding.imageView4.setImageResource(R.drawable.bg_mobile_dark)
