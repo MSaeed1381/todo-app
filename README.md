@@ -1,5 +1,5 @@
 # todo-app
-A simple todo list app built in **Kotlin** that help manage your daily tasks and don't forget about important things!
+A simple todo list app built in **Kotlin** that help manage your daily tasks and don't forget about important things!!
 
 
 
